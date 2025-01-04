@@ -1,0 +1,60 @@
+<ResourceDictionary
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:sys="using:System"
+  xmlns:controls="using:Xabbo.Avalonia.Controls"
+  xmlns:services="using:Xabbo.Avalonia.Services"
+  xmlns:img="using:AsyncImageLoader"
+>
+
+  <Design.PreviewWith>
+    <StackPanel Width="400" Spacing="10">
+      <StackPanel Background="{DynamicResource SystemRegionBrush}">
+        <!-- Use AvatarImage with any design-time scaling or properties for preview -->
+        <controls:AvatarImage Scaling="1.5" Direction="2" HeadOnly="False" />
+      </StackPanel>
+    </StackPanel>
+  </Design.PreviewWith>
+
+  <ControlTheme x:Key="{x:Type controls:AvatarImage}" TargetType="controls:AvatarImage">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Classes.headonly="{TemplateBinding HeadOnly}">
+          <Panel.Styles>
+            <Style Selector="Panel">
+              <!-- For full body -->
+              <Style Selector="^:not(.headonly)">
+                <Setter Property="Width"
+                        Value="{Binding AvatarBodyWidth, RelativeSource={RelativeSource TemplatedParent}}" />
+                <Setter Property="Height"
+                        Value="{Binding AvatarBodyHeight, RelativeSource={RelativeSource TemplatedParent}}" />
+              </Style>
+              <!-- For head-only -->
+              <Style Selector="^.headonly">
+                <Setter Property="Width"
+                        Value="{Binding AvatarHeadWidth, RelativeSource={RelativeSource TemplatedParent}}" />
+                <Setter Property="Height"
+                        Value="{Binding AvatarHeadHeight, RelativeSource={RelativeSource TemplatedParent}}" />
+              </Style>
+            </Style>
+          </Panel.Styles>
+          <!-- Placeholder image logic -->
+          <img:AdvancedImage Source="{TemplateBinding Placeholder}">
+            <img:AdvancedImage.IsVisible>
+              <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                <Binding Path="#AvatarImage.IsLoading" />
+                <TemplateBinding Property="AvatarImageUrl" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+              </MultiBinding>
+            </img:AdvancedImage.IsVisible>
+          </img:AdvancedImage>
+          <!-- Avatar image -->
+          <img:AdvancedImage
+            x:Name="AvatarImage"
+            Loader="{x:Static services:XabboImageLoader.Instance}"
+            Source="{TemplateBinding AvatarImageUrl}"
+          />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

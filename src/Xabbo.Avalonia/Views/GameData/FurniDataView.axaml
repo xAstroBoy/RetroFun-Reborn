@@ -1,0 +1,127 @@
+<UserControl
+  x:Name="Root"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:ui="using:FluentAvalonia.UI.Controls"
+  xmlns:ic="using:FluentIcons.Avalonia.Fluent"
+  xmlns:icm="using:FluentIcons.Avalonia.Fluent.MarkupExtensions"
+  xmlns:xc="using:Xabbo.Core"
+  xmlns:controls="using:Xabbo.Avalonia.Controls"
+  xmlns:v="using:Xabbo.Avalonia.Views"
+  xmlns:vm="using:Xabbo.ViewModels"
+  mc:Ignorable="d"
+  d:DesignWidth="800"
+  d:DesignHeight="450"
+  x:Class="Xabbo.Avalonia.Views.FurniDataView"
+  x:DataType="vm:FurniDataViewModel"
+>
+  <Grid RowDefinitions="Auto,*">
+    <Grid ColumnDefinitions="150,*,Auto" Margin="10">
+      <ComboBox
+        Grid.Column="0"
+        ItemsSource="{Binding FilterOptions}"
+        SelectedItem="{Binding SelectedFilter, Mode=TwoWay}"
+        PlaceholderText="Filter By"
+      />
+      <TextBox
+        Grid.Column="1"
+        Classes="clearButton"
+        Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        Watermark="Filter"
+      />
+    </Grid>
+    <DataGrid
+      Grid.Row="1"
+      ItemsSource="{Binding Furni}"
+      CanUserReorderColumns="True"
+      CanUserResizeColumns="True"
+      CanUserSortColumns="True"
+      AutoGenerateColumns="False"
+      IsReadOnly="True"
+    >
+
+      <DataGrid.Columns>
+        <DataGridTextColumn
+          Width="200"
+          Header="Name"
+          Binding="{Binding Identifier}"
+          SortMemberPath="Identifier"
+        />
+        <DataGridTemplateColumn
+          x:DataType="vm:FurniInfoViewModel"
+          Width="150"
+          Header="Description"
+          ClipboardContentBinding="{Binding Description}"
+          SortMemberPath="Description"
+        >
+          <DataTemplate DataType="vm:FurniInfoViewModel">
+            <TextBlock
+              Margin="12,0,12,0"
+              VerticalAlignment="Center"
+              FontFamily="{StaticResource Mono}"
+              FontSize="14"
+              Text="{Binding Description}"
+              TextTrimming="CharacterEllipsis"
+            />
+          </DataTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn
+          x:DataType="vm:FurniInfoViewModel"
+          Width="150"
+          Header="Class"
+          ClipboardContentBinding="{Binding ClassName}"
+          SortMemberPath="ClassName"
+        >
+          <DataTemplate DataType="vm:FurniInfoViewModel">
+            <TextBlock
+              Margin="12,0,12,0"
+              VerticalAlignment="Center"
+              FontFamily="{StaticResource Mono}"
+              FontSize="14"
+              Text="{Binding ClassName}"
+              TextTrimming="CharacterEllipsis"
+            />
+          </DataTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn
+          x:DataType="vm:FurniInfoViewModel"
+          Width="150"
+          Header="Type ID"
+          ClipboardContentBinding="{Binding TypeID}"
+          SortMemberPath="TypeID"
+          IsVisible="{DynamicResource IsModern}"
+        >
+          <DataTemplate DataType="vm:FurniInfoViewModel">
+            <TextBlock
+              Margin="12,0,12,0"
+              VerticalAlignment="Center"
+              FontFamily="{StaticResource Mono}"
+              FontSize="14"
+              Text="{Binding TypeID}"
+              TextTrimming="CharacterEllipsis"
+            />
+          </DataTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn
+          x:DataType="vm:FurniInfoViewModel"
+          Width="80"
+          Header="Type"
+          ClipboardContentBinding="{Binding Type}"
+          SortMemberPath="Type"
+          IsVisible="{DynamicResource IsModern}"
+        >
+          <DataTemplate DataType="vm:FurniInfoViewModel">
+            <TextBlock
+              Margin="12,0,12,0"
+              VerticalAlignment="Center"
+              Text="{Binding Type}"
+              TextTrimming="CharacterEllipsis"
+            />
+          </DataTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</UserControl>
